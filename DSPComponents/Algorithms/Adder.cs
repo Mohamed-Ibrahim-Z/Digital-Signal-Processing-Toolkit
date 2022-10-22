@@ -16,6 +16,7 @@ namespace DSPAlgorithms.Algorithms
         {
             OutputSignal = new Signal(new List<float>(), false);
             int maxLength =0 ;
+
             for(int i =0; i< InputSignals.Count;i++)
             {
                 if (InputSignals[i].Samples.Count > maxLength)

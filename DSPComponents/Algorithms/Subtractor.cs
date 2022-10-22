@@ -19,7 +19,13 @@ namespace DSPAlgorithms.Algorithms
         /// </summary>
         public override void Run()
         {
-            throw new NotImplementedException();
+            OutputSignal = new Signal(new List<float>(), false);
+            int maxLength = Math.Max(InputSignal1.Samples.Count, InputSignal2.Samples.Count); 
+            for (int i = 0; i < maxLength; i++)
+            {
+                float val = InputSignal1.Samples[i] - InputSignal2.Samples[i];
+                OutputSignal.Samples.Add(val);
+            }
         }
     }
 }
