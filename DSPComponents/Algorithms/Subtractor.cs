@@ -20,12 +20,26 @@ namespace DSPAlgorithms.Algorithms
         public override void Run()
         {
             OutputSignal = new Signal(new List<float>(), false);
-            int maxLength = Math.Max(InputSignal1.Samples.Count, InputSignal2.Samples.Count); 
-            for (int i = 0; i < maxLength; i++)
-            {
-                float val = InputSignal1.Samples[i] - InputSignal2.Samples[i];
-                OutputSignal.Samples.Add(val);
-            }
+            //int maxLength = Math.Max(InputSignal1.Samples.Count, InputSignal2.Samples.Count); 
+            //for (int i = 0; i < maxLength; i++)
+            //{
+            //    float val = InputSignal1.Samples[i] - InputSignal2.Samples[i];
+            //    OutputSignal.Samples.Add(val);
+            //}
+            MultiplySignalByConstant m = new MultiplySignalByConstant();
+            m.InputSignal= InputSignal2;
+            m.InputConstant = -1;
+            m.Run();
+
+            Adder adder = new Adder();
+            adder.InputSignals = new List<Signal>();
+            adder.InputSignals.Add(InputSignal1);
+            adder.InputSignals.Add(m.OutputMultipliedSignal);
+            adder.Run();
+
+            OutputSignal = adder.OutputSignal;
+
+            
         }
     }
 }
