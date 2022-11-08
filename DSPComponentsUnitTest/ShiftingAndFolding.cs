@@ -134,7 +134,7 @@ namespace DSPComponentsUnitTest
             // -5, -4, -3, -2
 
             actualOutputSignal = s2.OutputShiftedSignal;
-           // expectedOutputSignal = new Signal(new List<float>(){1, 2, 3, 8}, new List<int>(){{-5, -4, -3, -2}}, false));
+            //expectedOutputSignal = new Signal(new List<float>(){1, 2, 3, 8}, new List<int>(){-5, -4, -3, -2}, false);
         }
     }
 }

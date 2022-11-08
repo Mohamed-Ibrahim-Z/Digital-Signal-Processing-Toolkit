@@ -18,7 +18,18 @@ namespace DSPAlgorithms.Algorithms
         /// </summary>
         public override void Run()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            float[] sum = new float[InputSignal1.Samples.Count + InputSignal2.Samples.Count - 1];
+            int index = 0;
+            for (int i = 0; i < InputSignal2.Samples.Count; i++)
+            {
+                for (int j = 0; j < InputSignal1.Samples.Count; j++)
+                {
+                    sum[index + j] += InputSignal1.Samples[j] * InputSignal2.Samples[i];
+                }
+                index++;
+            }
+            OutputConvolvedSignal = new Signal(sum.ToList(), false);
         }
     }
 }
