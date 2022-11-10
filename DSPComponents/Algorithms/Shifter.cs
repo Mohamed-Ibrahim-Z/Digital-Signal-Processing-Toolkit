@@ -16,7 +16,7 @@ namespace DSPAlgorithms.Algorithms
         public override void Run()
         {
             OutputShiftedSignal = new Signal(new List<float>(), new List<int>(), false);
-            if (InputSignal.Periodic == true)
+            if (InputSignal.Periodic)
             {
                 ShiftingValue = -1 * ShiftingValue;
                 OutputShiftedSignal.Periodic = true;

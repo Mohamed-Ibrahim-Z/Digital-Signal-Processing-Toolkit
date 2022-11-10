@@ -20,10 +20,9 @@ namespace DSPAlgorithms.Algorithms
             for (int i = InputSignal.Samples.Count - 1; i >= 0; i--)
             {
                 OutputFoldedSignal.Samples.Add(InputSignal.Samples[i]);
-                //OutputFoldedSignal.SamplesIndices.Add(-1 * InputSignal.SamplesIndices[i]);
-                OutputFoldedSignal.SamplesIndices.Add(InputSignal.SamplesIndices[InputSignal.SamplesIndices.Count-i-1]);
+                OutputFoldedSignal.SamplesIndices.Add(-1 * InputSignal.SamplesIndices[i]);
             }
-            if (InputSignal.Periodic==false )
+            if (!InputSignal.Periodic)
                 OutputFoldedSignal.Periodic = true;
             else 
                 OutputFoldedSignal.Periodic = false;
