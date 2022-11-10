@@ -15,17 +15,23 @@ namespace DSPAlgorithms.Algorithms
         public Signal SecondDerivative { get; set; }
 
         public override void Run()
-        { 
+        {
             FirstDerivative = new Signal(new List<float>(), false);
             SecondDerivative = new Signal(new List<float>(), false);
-            for (int i = 0; i < InputSignal.Samples.Count; i++)
+           
+            for (int i = 0; i < InputSignal.Samples.Count - 1; i++)
             {
-                float sample = InputSignal.Samples[i], before, after;
-                if (i == InputSignal.Samples.Count - 1) after = InputSignal.Samples[i]; else after = InputSignal.Samples[i + 1];
-                if (i == 0) before = 0; else before = InputSignal.Samples[i - 1];
-                FirstDerivative.Samples.Add(sample - before);
-                SecondDerivative.Samples.Add(after - 2*sample+before);
-                            
+                if (i == 0)
+                {
+                    FirstDerivative.Samples.Add(InputSignal.Samples[i]);
+                    SecondDerivative.Samples.Add(InputSignal.Samples[i + 1] - 2 * InputSignal.Samples[i]);
+                }
+                
+                else
+                {
+                    FirstDerivative.Samples.Add(InputSignal.Samples[i] - InputSignal.Samples[i - 1]);
+                    SecondDerivative.Samples.Add(InputSignal.Samples[i + 1] - 2 * InputSignal.Samples[i] + InputSignal.Samples[i - 1]);
+                }
             }
 
         }
