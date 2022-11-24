@@ -25,14 +25,12 @@ namespace DSPAlgorithms.Algorithms
             int deff= Math.Abs(InputSignal2.SamplesIndices[0]-InputSignal1.SamplesIndices[0]);
             int size = InputSignal1.Samples.Count + InputSignal2.Samples.Count - 1;
             float[] sum = new float[size];
-            int arrIndex = 0;
-            for (int i = 0; i < InputSignal1.Samples.Count; i++)
+            for (int i = 0,arrIndex = 0; i < InputSignal1.Samples.Count; i++,arrIndex++)
             {
                 for (int j = 0; j < InputSignal2.Samples.Count; j++)
                 {
                     sum[arrIndex + j] += InputSignal1.Samples[i] * InputSignal2.Samples[j];
                 }
-                arrIndex++;
             }
             if (InputSignal2.SamplesIndices[0]!=0&&InputSignal1.SamplesIndices[0]!=0) minIndex -= deff;
             for (int i = 0; i < size; i++)
