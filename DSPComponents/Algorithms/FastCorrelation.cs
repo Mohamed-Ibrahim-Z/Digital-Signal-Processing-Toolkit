@@ -29,8 +29,6 @@ namespace DSPAlgorithms.Algorithms
 
             float sumIN1 = 0;
             float sumIN2 = 0;
-
-            //InputSignal2.Samples.Reverse();
             for (int i = 0; i < InputSignal1.Samples.Count; i++)
             {
                 sumIN1 += (float)Math.Pow(InputSignal1.Samples[i], 2);
@@ -52,8 +50,8 @@ namespace DSPAlgorithms.Algorithms
 
             for (int i = 0; i < InputSignal1.Samples.Count; i++)
             {
-                Complex c1 = Complex.FromPolarCoordinates(signal1.FrequenciesAmplitudes[i], signal1.FrequenciesPhaseShifts[i]),
-                c2 = Complex.FromPolarCoordinates(signal2.FrequenciesAmplitudes[i],-1*signal2.FrequenciesPhaseShifts[i]),
+                Complex c1 = Complex.FromPolarCoordinates(signal1.FrequenciesAmplitudes[i], -1*signal1.FrequenciesPhaseShifts[i]),
+                c2 = Complex.FromPolarCoordinates(signal2.FrequenciesAmplitudes[i],signal2.FrequenciesPhaseShifts[i]),
                 result = Complex.Multiply(c1, c2);
                 output.FrequenciesAmplitudes.Add((float)result.Magnitude);
                 output.FrequenciesPhaseShifts.Add((float)result.Phase);
