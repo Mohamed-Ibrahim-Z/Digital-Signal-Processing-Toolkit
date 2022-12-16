@@ -36,7 +36,18 @@ namespace DSPAlgorithms.Algorithms
             for (int i = 0; i < size; i++)
             {
                 if (i == size - 1 && sum[i] == 0)
+                {
+                    for (int j = size-2; j>0; j--)
+                    {
+                        if (OutputConvolvedSignal.Samples[j] == 0)
+                        {
+                            OutputConvolvedSignal.Samples.RemoveAt(j);
+                            OutputConvolvedSignal.SamplesIndices.RemoveAt(j);
+                        }
+                        else break;
+                    }
                     break;
+                }
                 OutputConvolvedSignal.Samples.Add(sum[i]);
                 OutputConvolvedSignal.SamplesIndices.Add(minIndex+i);
             }
