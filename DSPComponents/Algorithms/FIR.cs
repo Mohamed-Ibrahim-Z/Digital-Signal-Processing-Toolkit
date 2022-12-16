@@ -28,8 +28,8 @@ namespace DSPAlgorithms.Algorithms
 
         public override void Run()
         {
-            OutputHn = new Signal(new List<float>(), false);
-            OutputYn = new Signal(new List<float>(), false);
+            OutputHn = new Signal(new List<float>(),new List<int>(), false);
+            OutputYn = new Signal(new List<float>(),new List<int>(),false);
             Window_TYPES windowfunc;
             List<float> w = new List<float>();
             List<float> h = new List<float>();

@@ -35,6 +35,7 @@ namespace DSPAlgorithms.Algorithms
                 for (int i = 0; i < InputSignal.Samples.Count; i += M)
                 {
                     OutputSignal.Samples.Add(InputSignal.Samples[i]);
+                    OutputSignal.SamplesIndices.Add(fir.OutputYn.SamplesIndices[i]);
                 }
 
             }
@@ -89,6 +90,7 @@ namespace DSPAlgorithms.Algorithms
                 for (int i = 0; i < fir.OutputYn.Samples.Count; i += M)
                 {
                     OutputSignal.Samples.Add(fir.OutputYn.Samples[i]);
+                    OutputSignal.SamplesIndices.Add(fir.OutputYn.SamplesIndices[i]);
                 }
 
             }
