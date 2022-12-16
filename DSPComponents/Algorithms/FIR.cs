@@ -77,7 +77,7 @@ namespace DSPAlgorithms.Algorithms
                     }
                 case FILTER_TYPES.HIGH:
                     {
-                        float fc = (float)(InputCutOffFrequency + (InputTransitionBand / 2)) / InputFS;
+                        float fc = (float)(InputCutOffFrequency - (InputTransitionBand / 2)) / InputFS;
                         for (int i = -N / 2; i <= N / 2; i++)
                         {
                             if (i == 0) { h.Add(1 - (2 * fc)); }
@@ -88,7 +88,7 @@ namespace DSPAlgorithms.Algorithms
 
                 case FILTER_TYPES.BAND_PASS:
                     {
-                        float fc1 = (float)((InputF1 + (InputTransitionBand / 2)) / InputFS);
+                        float fc1 = (float)((InputF1 - (InputTransitionBand / 2)) / InputFS);
                         float fc2 = (float)((InputF2 + (InputTransitionBand / 2)) / InputFS);
                         for (int i = -N / 2; i <= N / 2; i++)
                         {
@@ -101,7 +101,7 @@ namespace DSPAlgorithms.Algorithms
                 case FILTER_TYPES.BAND_STOP:
                     {
                         float fc1 = (float)((InputF1 + (InputTransitionBand / 2)) / InputFS);
-                        float fc2 = (float)((InputF2 + (InputTransitionBand / 2)) / InputFS);
+                        float fc2 = (float)((InputF2 - (InputTransitionBand / 2)) / InputFS);
                         for (int i = -N / 2; i <= N / 2; i++)
                         {
                             if (i == 0) { h.Add(1-2*(fc2 - fc1)); }
