@@ -31,10 +31,7 @@ namespace DSPAlgorithms.Algorithms
                 OutputFreqDomainSignal.Frequencies.Add((float)Math.Round(((4*Math.PI*InputSamplingFrequency)/ InputTimeDomainSignal.Samples.Count)*i,1));
                 OutputFreqDomainSignal.FrequenciesAmplitudes.Add((float)sum.Magnitude);
                 OutputFreqDomainSignal.FrequenciesPhaseShifts.Add((float)sum.Phase);
-
             }
-
-
         }
     }
 }

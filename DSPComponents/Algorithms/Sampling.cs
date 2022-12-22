@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace DSPAlgorithms.Algorithms
 {
@@ -16,85 +17,74 @@ namespace DSPAlgorithms.Algorithms
         public Signal OutputSignal { get; set; }
 
 
-        
+        private Signal lowPassFilter(Signal inputSignal)
+        {
+            FIR fir = new FIR();
+            fir.InputTimeDomainSignal = inputSignal;
+            fir.InputFilterType = FILTER_TYPES.LOW;
+            fir.InputCutOffFrequency = 1500;
+            fir.InputFS = 8000;
+            fir.InputStopBandAttenuation = 50;
+            fir.InputTransitionBand = 500;
+            fir.Run();
+            return fir.OutputYn;
+        }
+        private Signal sample(Signal inputSignal, string s)
+        {
+            Signal outputSignal = new Signal(new List<float>(), new List<int>(), false);
+            int index = 0;
+            switch (s)
+            {
+                case "down":
+                    {
+                        
+                        for (int i = 0; i < inputSignal.Samples.Count; i += M)
+                        {
+                            outputSignal.Samples.Add(inputSignal.Samples[i]);
+                            outputSignal.SamplesIndices.Add(inputSignal.SamplesIndices[index]);
+                            index++;
+                        }
+                        return outputSignal;
+                    }
+                case "up":
+                    {
+                        
+                        for (int i = 0; i < inputSignal.Samples.Count; i++)
+                        {
 
+                            outputSignal.Samples.Add(inputSignal.Samples[i]);
+                            for (int j = 0; j < L - 1; j++)
+                            {
+                                outputSignal.Samples.Add(0);
+                                outputSignal.SamplesIndices.Add(index);
+                                index++;
+                            }
+                        }
+                        return outputSignal;
+                    }
+                default:
+                    return null;
+            }  
+        }
         public override void Run()
         {
-            OutputSignal = new Signal(new List<float>(), false);
             if (M != 0 && L == 0)
             {
-                FIR fir = new FIR();
-                fir.InputTimeDomainSignal = InputSignal;
-                fir.InputFilterType = FILTER_TYPES.LOW;
-                fir.InputCutOffFrequency = 1500;
-                fir.InputFS = 8000;
-                fir.InputStopBandAttenuation = 50;
-                fir.InputTransitionBand = 500;
-                fir.Run();
-                InputSignal = fir.OutputYn;
-                for (int i = 0; i < InputSignal.Samples.Count; i += M)
-                {
-                    OutputSignal.Samples.Add(InputSignal.Samples[i]);
-                    OutputSignal.SamplesIndices.Add(fir.OutputYn.SamplesIndices[i]);
-                }
+                InputSignal = lowPassFilter(InputSignal);
+                OutputSignal = sample(InputSignal, "down");
 
             }
             else if (L != 0 && M == 0)
             {
-                int index = 0;
-                for (int i = 0; i < InputSignal.Samples.Count; i++)
-                {
-
-                    OutputSignal.Samples.Add(InputSignal.Samples[i]);
-                    for (int j = 0; j < L - 1; j++)
-                    {
-                        OutputSignal.Samples.Add(0);
-                        OutputSignal.SamplesIndices.Add(index);
-                        index++;
-                    }
-                }
-                FIR fir = new FIR();
-                fir.InputTimeDomainSignal = OutputSignal;
-                fir.InputFilterType = FILTER_TYPES.LOW;
-                fir.InputCutOffFrequency = 1500;
-                fir.InputFS = 8000;
-                fir.InputStopBandAttenuation = 50;
-                fir.InputTransitionBand = 500;
-                fir.Run();
-                OutputSignal = fir.OutputYn;
+                OutputSignal = sample(InputSignal, "up");
+                OutputSignal = lowPassFilter(OutputSignal);
             }
             else
             {
-                int index = 0;
-                Signal temp = new Signal(new List<float>(),new List<int>(),false);
-                for (int i = 0; i < InputSignal.Samples.Count; i++)
-                {
-                    temp.Samples.Add(InputSignal.Samples[i]);
-                    for (int j = 0; j < L - 1; j++)
-                    {
-                        temp.Samples.Add(0);
-                        temp.SamplesIndices.Add(index);
-                        index++;
-                    }
-                }
-                FIR fir = new FIR();
-                fir.InputTimeDomainSignal = temp;
-                fir.InputFilterType = FILTER_TYPES.LOW;
-                fir.InputCutOffFrequency = 1500;
-                fir.InputFS = 8000;
-                fir.InputStopBandAttenuation = 50;
-                fir.InputTransitionBand = 500;
-                fir.Run();
-                
-
-                for (int i = 0; i < fir.OutputYn.Samples.Count; i += M)
-                {
-                    OutputSignal.Samples.Add(fir.OutputYn.Samples[i]);
-                    OutputSignal.SamplesIndices.Add(fir.OutputYn.SamplesIndices[i]);
-                }
-
+                OutputSignal = sample(InputSignal, "up");
+                OutputSignal = lowPassFilter(OutputSignal);
+                OutputSignal = sample(OutputSignal, "down");
             }
-
         }
     }
     

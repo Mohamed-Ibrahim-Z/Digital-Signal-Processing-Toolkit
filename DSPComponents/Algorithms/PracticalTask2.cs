@@ -32,27 +32,76 @@ namespace DSPAlgorithms.Algorithms
             fir.InputStopBandAttenuation = 50;
             fir.InputTransitionBand = 500;
             fir.Run();
-            Sampling s = new Sampling();
-            s.InputSignal = fir.OutputYn;
-            s.M = M;
-            s.L = L;
-            s.Run();
+            Signal temp = fir.OutputYn;
+            if (newFs >= 2 * maxF)
+            {
+                Sampling s = new Sampling();
+                s.InputSignal = fir.OutputYn;
+                s.M = M;
+                s.L = L;
+                s.Run();
+                temp = s.OutputSignal;
+                saveSignal("C:/Users/mazen/OneDrive/Desktop/Outputs/Sampling.ds", temp);
+            }
             DC_Component dc = new DC_Component();
-            dc.InputSignal = s.OutputSignal;
+            dc.InputSignal = temp;
             dc.Run();
+            saveSignal("C:/Users/mazen/OneDrive/Desktop/Outputs/DC.ds", dc.OutputSignal);
             Normalizer n = new Normalizer();
             n.InputMinRange = -1;
             n.InputMaxRange=1;
             n.InputSignal = dc.OutputSignal;
             n.Run();
+            saveSignal("C:/Users/mazen/OneDrive/Desktop/Outputs/Normalized.ds", n.OutputNormalizedSignal);
             DiscreteFourierTransform dft = new DiscreteFourierTransform();
             dft.InputTimeDomainSignal = n.OutputNormalizedSignal;
             dft.InputSamplingFrequency = newFs;
             dft.Run();
             OutputFreqDomainSignal = dft.OutputFreqDomainSignal;
-
+            saveSignal("C:/Users/mazen/OneDrive/Desktop/Outputs/DFT.ds", dft.OutputFreqDomainSignal);
         }
+        public void saveSignal(String SignalPath, Signal signal)
+        {
+            using (StreamWriter writer = File.CreateText(SignalPath))
+            {
+                if (signal.Frequencies == null || signal.Frequencies.Count == 0)
+                    writer.WriteLine(0);
+                else
+                    writer.WriteLine(1);
+                if (signal.Periodic == false)
+                    writer.WriteLine(0);
+                else
+                    writer.WriteLine(1);
+                if (signal.Frequencies == null || signal.Frequencies.Count == 0)
+                {
+                    writer.WriteLine(signal.Samples.Count);
+                }
+                else writer.WriteLine(signal.Frequencies.Count);
+                if (signal.Frequencies == null || signal.Frequencies.Count == 0)
+                {
+                    for (int i = 0; i < signal.Samples.Count; i++)
+                    {
+                        writer.Write(signal.SamplesIndices[i]);
+                        writer.Write(" ");
+                        writer.WriteLine(signal.Samples[i]);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < signal.Frequencies.Count; i++)
+                    {
+                        writer.Write(signal.Frequencies[i]);
+                        writer.Write(" ");
+                        writer.Write(signal.FrequenciesAmplitudes[i]);
+                        writer.Write(" ");
+                        writer.WriteLine(signal.FrequenciesPhaseShifts[i]);
+                    }
+                }
 
+                writer.Flush();
+                writer.Close();
+            }
+        }
         public Signal LoadSignal(string filePath)
         {
             Stream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);

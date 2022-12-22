@@ -19,18 +19,11 @@ namespace DSPAlgorithms.Algorithms
         public float InputTransitionBand { get; set; }
         public Signal OutputHn { get; set; }
         public Signal OutputYn { get; set; }
-        
-        public enum Window_TYPES
-        {
-            RECTANGULAR, HANNING,HAMMING , BLACKMAN
-        }
-       
 
         public override void Run()
         {
             OutputHn = new Signal(new List<float>(),new List<int>(), false);
             OutputYn = new Signal(new List<float>(),new List<int>(),false);
-            Window_TYPES windowfunc;
             List<float> w = new List<float>();
             List<float> h = new List<float>();
             int N;
@@ -62,16 +55,15 @@ namespace DSPAlgorithms.Algorithms
                 }
             }
 
-            
             switch (InputFilterType)
             {
                 case FILTER_TYPES.LOW:
                     {
-                        float fc = (float) (InputCutOffFrequency + (InputTransitionBand / 2)) / InputFS;
-                        for (int i = -N/2; i <= N/2; i++)
+                        float fc = (float)(InputCutOffFrequency + (InputTransitionBand / 2)) / InputFS;
+                        for (int i = -N / 2; i <= N / 2; i++)
                         {
-                            if (i == 0) {h.Add(2 * fc);}
-                            else h.Add((float)(2 * fc * (Math.Sin(2*Math.PI * fc * i)) / (2*Math.PI * fc * i)));
+                            if (i == 0) { h.Add(2 * fc); }
+                            else h.Add((float)(2 * fc * (Math.Sin(2 * Math.PI * fc * i)) / (2 * Math.PI * fc * i)));
                         }
                         break;
                     }
@@ -85,16 +77,15 @@ namespace DSPAlgorithms.Algorithms
                         }
                         break;
                     }
-
                 case FILTER_TYPES.BAND_PASS:
                     {
                         float fc1 = (float)((InputF1 - (InputTransitionBand / 2)) / InputFS);
                         float fc2 = (float)((InputF2 + (InputTransitionBand / 2)) / InputFS);
                         for (int i = -N / 2; i <= N / 2; i++)
                         {
-                            if (i == 0) { h.Add(2*(fc2 - fc1)); }
-                            else h.Add((float)((2*fc2*Math.Sin((2*Math.PI*fc2*i))/(2*Math.PI*fc2*i))-
-                                               (2*fc1*Math.Sin((2*Math.PI*fc1*i))/(2*Math.PI*fc1* i))));
+                            if (i == 0) { h.Add(2 * (fc2 - fc1)); }
+                            else h.Add((float)((2 * fc2 * Math.Sin((2 * Math.PI * fc2 * i)) / (2 * Math.PI * fc2 * i)) -
+                                               (2 * fc1 * Math.Sin((2 * Math.PI * fc1 * i)) / (2 * Math.PI * fc1 * i))));
                         }
                         break;
                     }
@@ -104,19 +95,15 @@ namespace DSPAlgorithms.Algorithms
                         float fc2 = (float)((InputF2 - (InputTransitionBand / 2)) / InputFS);
                         for (int i = -N / 2; i <= N / 2; i++)
                         {
-                            if (i == 0) { h.Add(1-2*(fc2 - fc1)); }
+                            if (i == 0) { h.Add(1 - 2 * (fc2 - fc1)); }
                             else h.Add((float)((2 * fc1 * Math.Sin((2 * Math.PI * fc1 * i)) / (2 * Math.PI * fc1 * i)) -
                                                (2 * fc2 * Math.Sin((2 * Math.PI * fc2 * i)) / (2 * Math.PI * fc2 * i))));
                         }
-                        break;  
+                        break;
                     }
-
-
             }
-
             for (int i =0, j=-N/2; i < N; i++,j++)
             {
-                
                 OutputHn.Samples.Add(h[i] * w[i]);
                 OutputHn.SamplesIndices.Add(j);
             }
@@ -126,9 +113,6 @@ namespace DSPAlgorithms.Algorithms
             dc.InputSignal2 = InputTimeDomainSignal;
             dc.Run();
             OutputYn = dc.OutputConvolvedSignal;
-
-
-
         }
     }
 }
