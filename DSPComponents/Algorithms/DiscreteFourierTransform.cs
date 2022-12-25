@@ -28,7 +28,7 @@ namespace DSPAlgorithms.Algorithms
                         -InputTimeDomainSignal.Samples[j] * (float)Math.Sin(2 * Math.PI * i * j / InputTimeDomainSignal.Samples.Count));
                     sum = new Complex(e.Real + sum.Real, e.Imaginary + sum.Imaginary);
                 }
-                OutputFreqDomainSignal.Frequencies.Add((float)Math.Round(((4*Math.PI*InputSamplingFrequency)/ InputTimeDomainSignal.Samples.Count)*i,1));
+                OutputFreqDomainSignal.Frequencies.Add((float)Math.Round(((2*Math.PI*InputSamplingFrequency)/ InputTimeDomainSignal.Samples.Count)*i,1));
                 OutputFreqDomainSignal.FrequenciesAmplitudes.Add((float)sum.Magnitude);
                 OutputFreqDomainSignal.FrequenciesPhaseShifts.Add((float)sum.Phase);
             }
